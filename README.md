@@ -1,6 +1,13 @@
 # enphase_scraper
 Downloads per-inverter data from your solar array.
 
+These scripts will start a session with the EnlightenManager website and download
+per-inverter data for the date range specified.
+
+Note: If you only have access to MyEnlighten, but not EnlightenManager, this might not
+work. I don't have the ability to test that scenario. I hope someone can test that for
+me! (You can reach me by openning an issue.)
+
 This tool is made up of three scripts:
 * login.py
 * logout.py
