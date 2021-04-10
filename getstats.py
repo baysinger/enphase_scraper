@@ -4,6 +4,7 @@ STATE_DIR = '~/.enphase_scraper'
 BASE_URL = 'https://enlighten.enphaseenergy.com'
 SYSTEM_URL = BASE_URL + '/systems/{system_id}'
 STATS_URL = SYSTEM_URL + '/inverter_data_x/time_series.json'
+POWER_URL = SYSTEM_URL + '/power_time_series?days=1&date={date}'
 INVERTERS_URL = SYSTEM_URL + '/inverter_status_x.json'
 INVERTER_STATS_URL = SYSTEM_URL + '/inverters/{inverter_id}/time_series_x'
 STATS = 'POWR,DCV,DCA,ACV,ACHZ,TMPI'
@@ -102,6 +103,19 @@ for i in range(days):
         print('Sleeping...')
         time.sleep(10)
     print(date.isoformat())
+    
+    url = POWER_URL.format(system_id=system_id, date=date.isoformat())
+    print(url)
+
+    with urllib.request.urlopen(url) as f:
+        data = f.read().decode('UTF-8')
+    json_obj = json.loads(data, object_pairs_hook=OrderedDict)
+
+    with open('data/' + date.isoformat() + '-production_consumption.json', 'w') as datafile:
+        datafile.write(json.dumps(json_obj, indent=4, separators=(',', ': ')))
+
+    time.sleep(1)
+
     first = True
     for key in inverters:
         if first:
